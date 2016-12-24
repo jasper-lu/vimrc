@@ -1,0 +1,89 @@
+OCaml development with Vim
+==========================
+
+When I have to write in OCaml, I like better to do it inside a cozy setup.
+Here is my current configuration:
+
+Opam
+----
+
+Opam seems to be the most convenient way to manage ocaml packages:
+
+``` shell
+# aptitude install opam
+$ opam init # and answer 'y'
+$ eval `opam config env` # or just close and open the terminal again
+$ opam update
+$ opam upgrade
+```
+
+Syntastic
+---------
+
+I already had [Syntastic] installed via [Vundle]:
+
+``` .vimrc
+Bundle 'Syntastic'
+```
+
+Ocp-indent
+----------
+
+Probably the best indentation tool around for this language.
+
+Installation with opam:
+
+``` shell
+opam install ocp-indent
+```
+
+Can be used from the command line:
+
+``` shell
+$ ocp-indent in.ml > out.ml	# Out of place
+$ ocp-indent -i inout.ml	# In place
+```
+
+but also from Vim, with the help of the plugin ocp-indent-vim:
+
+``` .vimrc
+Bundle "def-lkb/ocp-indent-vim"
+autocmd FileType ocaml exec ":source " . g:opamshare . "/vim/syntax/ocp-indent.vim"
+```
+
+Merlin
+------
+
+Being an OCaml package, Merlin is better handled by Opam than by Vundle:
+
+``` shell
+$ opam install merlin
+```
+
+The following lines must then be appended to `.vimrc`:
+
+``` .vimrc
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+let g:syntastic_ocaml_checkers = ['merlin']
+```
+
+Summary
+-------
+
+Now we should have:
+  * the indentation on-the-fly;
+  * the syntastic syntax warnings;
+  * `<leader>t` should display the type of the expression under the cursor;
+  * `C-X-O` should pop a completion box for function signatures.
+
+If not, then something is wrong with the setup.
+
+Other plugins (not used)
+------------------------
+
+ - oMLet: Indentation tool written in VimL, thus becoming quite slow for
+ large files.
+ - ocaml-annot
+ - vim-slime
+

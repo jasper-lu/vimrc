@@ -21,8 +21,14 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'scrooloose/syntastic'
 Plugin 'junegunn/seoul256.vim'
 Plugin 'Yggdroot/indentLine'
+Plugin 'def-lkb/ocp-indent-vim'
 
 call vundle#end()
+
+"OCaml stuff
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+let g:syntastic_ocaml_checkers = ['merlin']
 
 "Syntastic settings
 set statusline+=%#warningmsg#
@@ -37,6 +43,7 @@ let g:syntastic_check_on_wq = 0
 "need this for airline for some reason
 set laststatus=2
 " air-line
+let g:airline_powerline_fonts = 1
 let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
 
 syntax on
@@ -83,7 +90,7 @@ set visualbell
 "Encoding
 set encoding=utf-8
 
-" Custom kets
+" Custom keys
 let mapleader = ","
 inoremap jk <esc>
 
@@ -98,6 +105,3 @@ nnoremap E $
 filetype on
 filetype plugin on
 filetype indent on
-set rtp+=~/.tools/ocp-indent-vim
-let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
-execute "set rtp+=" . g:opamshare . "/merlin/vim"
