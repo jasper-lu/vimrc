@@ -37,15 +37,6 @@ let g:syntastic_check_on_wq = 0
 "need this for airline for some reason
 set laststatus=2
 " air-line
-let g:airline_powerline_fonts = 1
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_branch_prefix = ''
-let g:airline_readonly_symbol = ''
-let g:airline_linecolumn_prefix = ''
-
 let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
 
 syntax on
