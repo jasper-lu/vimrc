@@ -22,23 +22,100 @@ Plugin 'scrooloose/syntastic'
 Plugin 'junegunn/seoul256.vim'
 Plugin 'Yggdroot/indentLine'
 Plugin 'def-lkb/ocp-indent-vim'
+Plugin 'tpope/vim-rails'
+Plugin 'scrooloose/nerdtree'
+Plugin 'mxw/vim-jsx'
+Plugin 'junegunn/fzf'
+Plugin 'w0rp/ale'
+Plugin 'mileszs/ack.vim'
+Plugin 'wesQ3/vim-windowswap'
 
 call vundle#end()
 
 "OCaml stuff
 let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
 execute "set rtp+=" . g:opamshare . "/merlin/vim"
-let g:syntastic_ocaml_checkers = ['merlin']
+"let g:syntastic_ocaml_checkers = ['merlin']
 
-"Syntastic settings
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"Syntastic settings - commented out in favor of Ale
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"Ale settings
+"Show errors in statusline
+let g:airline#extensions#ale#enabled = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+let g:ale_emit_conflict_warnings = 0
+let g:ale_set_balloons = 1
+
+"Nerdtree settings
+autocmd StdinReadPre * let s:std_in=1
+"open nerdtree on directory open
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+"open nerdtree when vim starts
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"open nerdtree on ctrl N
+map <C-n> :NERDTreeToggle<CR>
+"close nerdtree if left open and no other file opened
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+"Ack
+"Remember to intsall Ack!
+nmap <C-F> :Ack <space>
+
+"FZF
+nmap <C-D> :FZF<CR>
+
+" This is the default extra key bindings
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+" Default fzf layout
+" - down / up / left / right
+let g:fzf_layout = { 'down': '~40%' }
+
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+" Enable per-command history.
+" CTRL-N and CTRL-P will be automatically bound to next-history and
+" previous-history instead of down and up. If you don't like the change,
+" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+"Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+"
+" Advanced customization using autoload functions
+inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 
 "need this for airline for some reason
 set laststatus=2
@@ -63,12 +140,14 @@ inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
 
 
 " Text editing stuff
-set softtabstop=4 shiftwidth=4 expandtab " tabs
+set softtabstop=2 shiftwidth=2 expandtab " tabs
 set number "line number
 set relativenumber
 set showmatch "match parentheses 
 set autoindent
 set smartindent
+set colorcolumn=101
+set backspace=indent,eol,start
 
 " command menu
 set wildmenu " autocomplete
@@ -85,7 +164,7 @@ map <space> :noh<cr>
 
 
 " No beeps
-set visualbell
+set noerrorbells visualbell
 
 "Encoding
 set encoding=utf-8
@@ -100,6 +179,12 @@ nnoremap k gk
 
 nnoremap B ^
 nnoremap E $
+
+" tabs
+nnoremap <C-h> :tabprevious<CR>
+nnoremap <C-l> :tabnext<CR>
+nnoremap <silent> <A-h> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+nnoremap <silent> <A-l> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 
 
 filetype on
