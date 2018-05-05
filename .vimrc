@@ -18,7 +18,7 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 Plugin 'junegunn/seoul256.vim'
 Plugin 'Yggdroot/indentLine'
 Plugin 'def-lkb/ocp-indent-vim'
@@ -49,11 +49,11 @@ execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
 "Ale settings
 "Show errors in statusline
-let g:airline#extensions#ale#enabled = 1
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 0
-let g:ale_emit_conflict_warnings = 0
-let g:ale_set_balloons = 1
+"let g:airline#extensions#ale#enabled = 1
+"let g:ale_lint_on_save = 1
+"let g:ale_lint_on_text_changed = 0
+"let g:ale_emit_conflict_warnings = 0
+"let g:ale_set_balloons = 1
 
 "Nerdtree settings
 autocmd StdinReadPre * let s:std_in=1
@@ -121,7 +121,7 @@ inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 set laststatus=2
 " air-line
 let g:airline_powerline_fonts = 1
-let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
+"let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 syntax on
 let g:seoul256_background=233
