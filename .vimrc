@@ -15,20 +15,25 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-"Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 "Plugin 'scrooloose/syntastic'
 Plugin 'junegunn/seoul256.vim'
 Plugin 'Yggdroot/indentLine'
-Plugin 'def-lkb/ocp-indent-vim'
-Plugin 'tpope/vim-rails'
+"Plugin 'def-lkb/ocp-indent-vim'
+"Plugin 'tpope/vim-rails'
 Plugin 'scrooloose/nerdtree'
-Plugin 'mxw/vim-jsx'
+"Plugin 'mxw/vim-jsx'
 Plugin 'junegunn/fzf'
-Plugin 'w0rp/ale'
+"Plugin 'w0rp/ale'
 Plugin 'mileszs/ack.vim'
 Plugin 'wesQ3/vim-windowswap'
+Plugin 'dense-analysis/ale'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'tpope/vim-fugitive'
+Plugin 'majutsushi/tagbar'
+Plugin 'grailbio/bazel-compilation-database'
 
 call vundle#end()
 
@@ -49,11 +54,12 @@ execute "set rtp+=" . g:opamshare . "/merlin/vim"
 
 "Ale settings
 "Show errors in statusline
-"let g:airline#extensions#ale#enabled = 1
-"let g:ale_lint_on_save = 1
-"let g:ale_lint_on_text_changed = 0
-"let g:ale_emit_conflict_warnings = 0
-"let g:ale_set_balloons = 1
+let g:airline#extensions#ale#enabled = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+let g:ale_emit_conflict_warnings = 0
+let g:ale_set_balloons = 1
+let g:ale_linters = {'cpp':['clang']}
 
 "Nerdtree settings
 autocmd StdinReadPre * let s:std_in=1
@@ -66,18 +72,27 @@ map <C-n> :NERDTreeToggle<CR>
 "close nerdtree if left open and no other file opened
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+"Nerdtree tab settings
+let g:nerdtree_tabs_open_on_console_startup = 1
+
+"Tagbar plugin 
+nmap <C-8> :TagbarToggle<CR>
+
+
 "Ack
 "Remember to intsall Ack!
-nmap <C-F> :Ack <space>
+nmap <C-F> :Ack! -i<space>
+"to pipe output out
+set shellpipe=>
 
 "FZF
-nmap <C-D> :FZF<CR>
+nmap <C-P> :FZF<CR>
 
 " This is the default extra key bindings
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
+  \ 'enter': 'vsplit' }
 
 " Default fzf layout
 " - down / up / left / right
@@ -121,7 +136,14 @@ inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 set laststatus=2
 " air-line
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline_section_z = airline#section#create(['windowswap', '%3p%% ', 'linenr', ':%3v'])
+
 "let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+if !exists('g:airline_symbols')
+      let g:airline_symbols = {}
+    endif
 
 syntax on
 let g:seoul256_background=233
@@ -185,7 +207,11 @@ nnoremap <C-h> :tabprevious<CR>
 nnoremap <C-l> :tabnext<CR>
 nnoremap <silent> <A-h> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 nnoremap <silent> <A-l> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+nnoremap <C-LEFT> :tabprevious<CR>
+nnoremap <C-RIGHT> :tabnext<CR>
 
+set splitright
+set splitbelow
 
 filetype on
 filetype plugin on
