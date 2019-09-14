@@ -147,7 +147,7 @@ if !exists('g:airline_symbols')
 
 syntax on
 let g:seoul256_background=233
-let g:airline_theme='bubblegum'
+let g:airline_theme='fruit_punch'
 colorscheme seoul256
 " My text completion options
 " 'improves' menu behavior
