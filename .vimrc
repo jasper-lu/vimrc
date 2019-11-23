@@ -25,9 +25,9 @@ Plugin 'Yggdroot/indentLine'
 "Plugin 'tpope/vim-rails'
 Plugin 'scrooloose/nerdtree'
 "Plugin 'mxw/vim-jsx'
-Plugin 'junegunn/fzf'
 "Plugin 'w0rp/ale'
 Plugin 'mileszs/ack.vim'
+Plugin 'kaicataldo/material.vim'
 Plugin 'wesQ3/vim-windowswap'
 Plugin 'dense-analysis/ale'
 Plugin 'jistr/vim-nerdtree-tabs'
@@ -36,6 +36,11 @@ Plugin 'majutsushi/tagbar'
 Plugin 'grailbio/bazel-compilation-database'
 
 call vundle#end()
+
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+call plug#end()
 
 "OCaml stuff
 let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
@@ -74,19 +79,25 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 "Nerdtree tab settings
 let g:nerdtree_tabs_open_on_console_startup = 1
+nnoremap <Space>f :NERDTreeFind<CR>
 
 "Tagbar plugin 
 nmap <C-8> :TagbarToggle<CR>
 
-
-"Ack
-"Remember to intsall Ack!
-nmap <C-F> :Ack! -i<space>
 "to pipe output out
 set shellpipe=>
 
 "FZF
+set rtp+=~/.fzf
 nmap <C-P> :FZF<CR>
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+:map <C-F> :Rg 
 
 " This is the default extra key bindings
 let g:fzf_action = {
@@ -160,6 +171,9 @@ inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
+"material settings
+let g:material_terminal_italics = 1
+let g:material_theme_style = 'darker'
 
 " Text editing stuff
 set softtabstop=2 shiftwidth=2 expandtab " tabs
@@ -216,3 +230,4 @@ set splitbelow
 filetype on
 filetype plugin on
 filetype indent on
+
